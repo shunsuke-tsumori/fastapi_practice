@@ -10,6 +10,8 @@ $ uvicorn blog.main:app --reload
 
 ### docs
 
+Swagger
+
 ```
 [base]/docs
 ```
