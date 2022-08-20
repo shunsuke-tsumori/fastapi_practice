@@ -1,3 +1,5 @@
 .idea
 venv
 __pycache__
+blog.db
+identifier.sqlite

@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 
-from blog.schemas import Blog
+from .schemas import Blog
+from .models import Base
+from .database import engine
 
 app = FastAPI()
+
+Base.metadata.create_all(engine)
 
 
 @app.post("/blog")
 def post_blog(blog: Blog):
-    return "create"
+    return {"data": blog}
