@@ -5,7 +5,7 @@
 ### dev-deploy
 
 ```shell
-$ uvicorn main:app --reload
+$ uvicorn blog.main:app --reload
 ```
 
 ### docs
