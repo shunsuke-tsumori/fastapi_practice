@@ -7,3 +7,7 @@ class Hash:
     @classmethod
     def bcrypt(cls, password: str):
         return pwd_context.hash(password)
+
+    @classmethod
+    def verify(cls, password1, password2):
+        return True
