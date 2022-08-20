@@ -1,10 +1,12 @@
+from typing import List
+
 from fastapi import FastAPI, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 
 from . import models
 from .database import engine, session_local
 from .models import Base
-from .schemas import Blog
+from .schemas import Blog, ShowBlog
 
 app = FastAPI()
 
@@ -30,13 +32,13 @@ def post_blog(blog: Blog, db: Session = Depends(get_db)):
     return new_blog
 
 
-@app.get("/blog", status_code=status.HTTP_200_OK)
+@app.get("/blog", status_code=status.HTTP_200_OK, response_model=List[ShowBlog])
 def all_getch(db: Session = Depends(get_db)):
     blogs = db.query(models.Blog).all()
     return blogs
 
 
-@app.get("/blog/{id}", status_code=status.HTTP_200_OK)
+@app.get("/blog/{id}", status_code=status.HTTP_200_OK, response_model=ShowBlog)
 def show(id: int, db: Session = Depends(get_db)):
     blog = db.query(models.Blog).filter(models.Blog.id == id).first()
     if not blog:
