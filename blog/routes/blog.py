@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session
 from blog import models
 from blog.database import get_db
 from blog.functions import blog
-from blog.schemas import Blog, ShowBlog
+from blog.schemas import Blog, ShowBlog, User
+from blog import oauth2
 
 router = APIRouter(
     prefix="/blog",
@@ -15,12 +16,12 @@ router = APIRouter(
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def post_blog(request: Blog, db: Session = Depends(get_db)):
-    return blog.create(request, db)
+def post_blog(request: Blog, db: Session = Depends(get_db), current_user: User = Depends(oauth2.get_current_user)):
+    return blog.create(request, db, current_user)
 
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[ShowBlog])
-def all_fetch(db: Session = Depends(get_db)):
+def all_fetch(db: Session = Depends(get_db), current_user: User = Depends(oauth2.get_current_user)):
     return blog.get_all(db)
 
 
