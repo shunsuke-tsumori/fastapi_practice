@@ -5,8 +5,9 @@ from sqlalchemy.orm import Session
 
 from . import models
 from .database import engine, session_local
+from .hashing import Hash
 from .models import Base
-from .schemas import Blog, ShowBlog
+from .schemas import Blog, ShowBlog, User
 
 app = FastAPI()
 
@@ -65,3 +66,13 @@ def update(id, request: Blog, db: Session = Depends(get_db)):
     db.commit()
 
     return "Update completed"
+
+
+@app.post("/user", status_code=status.HTTP_201_CREATED)
+def create_user(request: User, db: Session = Depends(get_db)):
+    hashed_password = Hash.bcrypt(request.password)
+    new_user = models.User(name=request.name, email=request.email, password=hashed_password)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
